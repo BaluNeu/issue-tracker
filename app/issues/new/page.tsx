@@ -9,7 +9,7 @@ import { useForm, Controller} from "react-hook-form";
 
 import axios from 'axios';
 
-import { zodResolver} from '@hookform/resolvers/zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import React, { useState } from 'react'
 import { Button } from '@radix-ui/themes'
@@ -87,7 +87,7 @@ const NewIssuePage = () => {
     </ErrorMessage>
     
     <Button disabled = {isSubmitting}>
-       Submit New Issue{isSubmitting && <Spinner/>}
+        Submit New Issue{isSubmitting && <Spinner/>}
     </Button>
     </form>
     </div>

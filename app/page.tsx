@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import IssuePage from './issues/page';
 
+
 export default function Home() {
   return (
     <div>

@@ -1,6 +1,6 @@
 'use client';
 // making this as a client component
-import { Callout, TextArea, TextField } from '@radix-ui/themes'
+import { Callout, TextArea, TextField, Text} from '@radix-ui/themes'
 
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
@@ -9,22 +9,25 @@ import { useForm, Controller} from "react-hook-form";
 
 import axios from 'axios';
 
+import { zodResolver} from '@hookform/resolvers/zod';
+
 import React, { useState } from 'react'
 import { Button } from '@radix-ui/themes'
 import { useRouter } from 'next/navigation';
-
+import { createIssueSchema } from '@/app/validationSchemas';
+import { z } from 'zod';
 // defining an interface for the shape of the form
 
-interface IssueForm {
-  title: string;
-  description: string;
-}
+type IssueForm = z.infer<typeof createIssueSchema>;
 
 const NewIssuePage = () => {
 
   const router = useRouter();
 
-  const {register, control, handleSubmit} = useForm<IssueForm>(); // shape of our form // to register input fields
+  const {register, control, handleSubmit, formState : {errors}} = useForm<IssueForm>({
+    resolver: zodResolver(createIssueSchema),
+  
+  }); // shape of our form // to register input fields
   // console.log(register('title'));
   const [error,setError] = useState('');
 
@@ -59,6 +62,8 @@ const NewIssuePage = () => {
 
     </TextField.Root>
 
+    {errors.title && <Text color ="red" as = 'p'>{errors.title.message}</Text>}
+
     {/* we cannot use the same register function for SimpleMDE */}
     <Controller
       name = "description"
@@ -66,7 +71,7 @@ const NewIssuePage = () => {
       render={({field}) => <SimpleMDE placeholder='Description' {...field}/>}
     
     />
-
+    {errors.description && <Text color ="red" as = 'p'>{errors.description.message}</Text>}
     
     <Button> Submit New Issue</Button>
     </form>

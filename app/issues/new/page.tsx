@@ -17,6 +17,7 @@ import { useRouter } from 'next/navigation';
 import { createIssueSchema } from '@/app/validationSchemas';
 import { z } from 'zod';
 import ErrorMessage from '@/app/components/errorMessage';
+import Spinner from '@/app/components/Spinner';
 // defining an interface for the shape of the form
 
 type IssueForm = z.infer<typeof createIssueSchema>;
@@ -31,6 +32,7 @@ const NewIssuePage = () => {
   }); // shape of our form // to register input fields
   // console.log(register('title'));
   const [error,setError] = useState('');
+  const [isSubmitting, setSubmitting] = useState(false);
 
 {/* <form className='max-w-xl space-y-3' onSubmit={handleSubmit((data) => console.log(data))}></form> */}
 {/* instead of doing console log -> send the data to api-> using axios */}
@@ -46,11 +48,14 @@ const NewIssuePage = () => {
       )}
       <form className='max-w-xl space-y-3' onSubmit={handleSubmit(async (data) => {
 
-          try
-          {await axios.post('/api/issues',data);
+          try{
+          
+          setSubmitting(true)
+          await axios.post('/api/issues',data);
           router.push('/issues');
         
         } catch (error) {
+          setSubmitting(false)
           setError("An unexpected error occurred")
         
         }
@@ -79,7 +84,9 @@ const NewIssuePage = () => {
       {errors.description?.message}
     </ErrorMessage>
     
-    <Button> Submit New Issue</Button>
+    <Button disabled = {isSubmitting}>
+       Submit New Issue{isSubmitting && <Spinner/>}
+    </Button>
     </form>
     </div>
   )

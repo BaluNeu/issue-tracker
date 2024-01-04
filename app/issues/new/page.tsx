@@ -16,6 +16,7 @@ import { Button } from '@radix-ui/themes'
 import { useRouter } from 'next/navigation';
 import { createIssueSchema } from '@/app/validationSchemas';
 import { z } from 'zod';
+import ErrorMessage from '@/app/components/errorMessage';
 // defining an interface for the shape of the form
 
 type IssueForm = z.infer<typeof createIssueSchema>;
@@ -62,7 +63,10 @@ const NewIssuePage = () => {
 
     </TextField.Root>
 
-    {errors.title && <Text color ="red" as = 'p'>{errors.title.message}</Text>}
+
+      <ErrorMessage>
+      {errors.title?.message}
+      </ErrorMessage>
 
     {/* we cannot use the same register function for SimpleMDE */}
     <Controller
@@ -71,7 +75,9 @@ const NewIssuePage = () => {
       render={({field}) => <SimpleMDE placeholder='Description' {...field}/>}
     
     />
-    {errors.description && <Text color ="red" as = 'p'>{errors.description.message}</Text>}
+    <ErrorMessage>
+      {errors.description?.message}
+    </ErrorMessage>
     
     <Button> Submit New Issue</Button>
     </form>

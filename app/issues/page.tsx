@@ -4,23 +4,19 @@ import Link from 'next/link';
 // import prisma from '@prisma/client';
 import prisma from '@/prisma/client';
 import IssueStatusBadge from '../components/IssueStatusBadge';
-// import { PrismaClient } from '@prisma/client'
-// import { async } from '../api/issues/route';
+
+import delay from 'delay';
+import IssueActions from './IssueActions';
 
 const IssuePage = async () => {
 
   const issues = prisma.issue.findMany();
 
+  await delay(2000);
+
   return (
     <div>
-        <div className='mb-5'>
-        <Button>
-        <Link href = '/issues/new'>New Issue
-        
-        </Link>
-        
-        </Button>
-        </div>
+        <IssueActions/>
         <Table.Root variant = 'surface'>
 
           <Table.Header>
@@ -48,7 +44,7 @@ const IssuePage = async () => {
                     <IssueStatusBadge status={issue.status}/>
                   </div>
                   </Table.Cell>
-                  
+
                 <Table.Cell className='hidden md:table-cell'>
 
                 <IssueStatusBadge status={issue.status}/>
